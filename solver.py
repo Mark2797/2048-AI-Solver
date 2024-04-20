@@ -33,14 +33,25 @@ def runRandom(board, firstMove):
 	moveList = randomGame.moveList
 	randomGame.board = copyBoard(board) 	#copy the given board to the new game
 	randomGame.makeMove(firstMove) 			#send the initial move
-
+ 
+	# N-1 Pattern
+    # pattern = [[16, 15, 14, 13], [15, 14, 13, 12], [14, 13, 12, 11], [13, 12, 11, 10]]
+    # S Pattern
+	pattern = [[16, 15, 14, 13], [9, 10, 11, 12], [8, 7, 6, 5], [1, 2, 3, 4]]
+    
 	while True:								#keep sending random moves until game is over
 		if randomGame.gameOver():
 			break
 		randMove = random.choice(moveList)
 		randomGame.makeMove(randMove)
 
-	return randomGame.score
+	availableCells = 0
+	evaluation = 0
+	for i in range(randomGame.size):
+		for j in range(randomGame.size):
+			if randomGame.board[i][j] == 0 : availableCells += 1
+			evaluation += randomGame.board[i][j] * pattern[i][j]
+	return evaluation / (randomGame.size * randomGame.size - availableCells)
 
 def bestMove(game, runs):
 	"""
